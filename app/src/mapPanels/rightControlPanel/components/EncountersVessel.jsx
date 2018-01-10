@@ -7,6 +7,9 @@ import ArrowLinkIcon from '-!babel-loader!svg-react-loader!assets/icons/arrow-li
 
 
 function EncountersVessel({ vessel }) {
+  if (vessel.info === undefined) {
+    return <div className={infoPanelStyles.encountersData}>loading...</div>;
+  }
   return (
     <div className={infoPanelStyles.encountersData} >
       <div className={infoPanelStyles.rowInfo} >
