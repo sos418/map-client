@@ -28,8 +28,9 @@ import recentVesselsReducer from 'recentVessels/recentVesselsReducer';
 import rightControlPanelReducer from 'mapPanels/rightControlPanel/rightControlPanelReducer';
 import shareReducer from 'share/shareReducer';
 import tracksReducer from 'tracks/tracksReducer';
-import AppContainer from 'containers/App';
 import AuthMapContainer from 'containers/AuthMap';
+import AppContainer from './app/containers/App';
+import { init } from './app/appActions';
 
 // Polyfill for older browsers (IE11 for example)
 window.Promise = window.Promise || Promise;
@@ -81,3 +82,5 @@ render(
   </Provider >,
   document.getElementById('app')
 );
+
+store.dispatch(init())
