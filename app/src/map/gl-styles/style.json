@@ -1,0 +1,353 @@
+{
+  "version": 8,
+  "metadata": {
+    "gfw:popups": {
+      "europe2": [
+        { "id": "admin" },
+        { "id": "adm0_a3", "label": "ISO Code" }      
+      ],
+      "rfmo": [
+        { "id": "rfb" },
+        { "id": "POLYGON_LAYERS_AREA" }
+      ],
+      "eez": [
+        { "id": "name" }
+      ],
+      "mpant": [
+        { "id": "name" },
+        { "id": "POLYGON_LAYERS_AREA" }
+      ],
+      "mparu": [
+        { "id": "name" },
+        { "id": "POLYGON_LAYERS_AREA" }
+      ],
+      "highseas": [
+        { "id": "regionid" },
+        { "id": "POLYGON_LAYERS_AREA" }
+      ],
+      "6": [
+        { "id": "nama" },
+        { "id": "POLYGON_LAYERS_AREA" }
+      ],
+      "mpatlas": [
+        { "id": "name" },
+        { "id": "POLYGON_LAYERS_AREA" }
+      ],
+      "falklands_conservation": [
+        { "id": "full_name" },
+        { "id": "zone" },
+        { "id": "area_sqkm" }
+      ],
+      "protectedplanet": [
+        { "id": "name" },
+        { "id": "iucn_cat", "label": "IUCN Category" },
+        { "id": "desig_eng", "label": "Designation" },
+        { "id": "rep_area" },
+        { "id": "no_take" },
+        { "id": "status" },
+        { "id": "status_yr" },
+        { "id": "gov_type" },
+        { "id": "mang_auth" },
+        { "id": "verif" },
+        { "id": "iso3" }
+      ]
+    },
+    "gfw:basemap-layers": [
+      { "id": "satellite", "label": "Satellite" },
+      { "id": "north-star", "label": "North Star" },
+      { "id": "labels", "isOption": true },
+      { "id": "graticules", "isOption": true },
+      { "id": "bathymetry", "isOption": true }
+    ]
+  },
+  "glyphs": "./gl-fonts/{fontstack}/{range}.pbf",
+  "sources": {
+    "satellite": {
+      "tiles": ["https://gtiles-dot-world-fishing-827.appspot.com/v1/tileset/sat/tile?x={x}&y={y}&z={z}"],
+      "type": "raster",
+      "tileSize": 256,
+      "attribution": "Map data ©2016 Google, INEGI Imagery ©2016 NASA"
+    },
+    "north-star": {
+      "tiles": ["https://gtiles-dot-world-fishing-827.appspot.com/v1/tileset/ns/tile?x={x}&y={y}&z={z}"],
+      "type": "raster",
+      "tileSize": 256
+    },
+    "labels": {
+      "tiles": ["https://gtiles-dot-world-fishing-827.appspot.com/v1/tileset/nslabels/tile?x={x}&y={y}&z={z}"],
+      "type": "raster",
+      "tileSize": 256
+    },
+    "graticules": {
+      "metadata": {
+        "gfw:carto-sql": "select * from ne_10m_graticules_10"
+      },
+      "type": "vector"
+    },
+    "bathymetry": {
+      "metadata": {
+        "gfw:carto-sql": "SELECT * FROM bathymetry order by depth"
+      },
+      "type": "vector"
+    },
+    "europe2": {
+      "metadata": {
+        "gfw:carto-sql": "select * from ne_adm0_europe"
+      },
+      "type": "vector",
+      "attribution": "<a href='http://mpatlas.org'>mpatlas.org</a>"
+    },
+    "mpant": {
+      "metadata": {
+        "gfw:carto-sql": "select *, cartodb_id as reporting_id, name as reporting_name from mpant"
+      },
+      "type": "vector"
+    }
+  },
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "layout": {},
+      "paint": {
+        "background-color": "#001436"
+      }
+    },
+    {
+      "id": "satellite",
+      "type": "raster",
+      "source": "satellite",
+      "layout": {},
+      "paint": {}
+    },
+    {
+      "id": "north-star",
+      "type": "raster",
+      "source": "north-star",
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {}
+    },
+    {
+      "id": "bathymetry",
+      "type": "fill",
+      "source": "bathymetry",
+      "source-layer": "bathymetry",
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+          "fill-color": [
+              "interpolate",
+              [
+                  "linear"
+              ],
+              [
+                  "get",
+                  "depth"
+              ],
+              200,
+              "hsl(215, 100%, 18%)",
+              10000,
+              "hsl(215, 100%, 0%)"
+          ],
+          "fill-outline-color": "hsla(0, 0%, 100%, 0.15)"
+      }
+    },
+    {
+      "id": "bathymetry-labels",
+      "type": "symbol",
+      "source": "bathymetry",
+      "source-layer": "bathymetry",
+      "minzoom": 3,
+      "layout": {
+          "visibility": "none",
+          "text-field": [
+              "to-string",
+              [
+                  "get",
+                  "depth"
+              ]
+          ],
+          "symbol-placement": "line",
+          "text-allow-overlap": true,
+          "text-size": 7,
+          "text-font": [
+              "Roboto Medium Italic"
+          ]
+      },
+      "paint": {
+          "text-color": "hsl(0, 0%, 100%)"
+      }
+    },
+    {
+      "id": "europe2",
+      "type": "fill",
+      "source": "europe2",
+      "source-layer": "europe2",
+      "layout": { 
+       "visibility": "none"
+      },
+      "paint": {},
+      "interactive": true
+    },
+    {
+      "id": "europe2-labels",
+      "type": "symbol",
+      "source": "europe2",
+      "source-layer": "europe2",
+      "layout": {
+        "visibility": "none",
+        "text-field": "{admin}",
+        "text-font": [
+          "Roboto Mono Light"
+        ],
+        "text-size": 10
+      },
+      "paint": {}
+    },
+    {
+      "id": "mpant",
+      "type": "fill",
+      "source": "mpant",
+      "source-layer": "mpant",
+      "layout": { 
+       "visibility": "none"
+      },
+      "paint": {},
+      "interactive": true
+    },
+    {
+      "id": "mpant-labels",
+      "type": "symbol",
+      "source": "mpant",
+      "source-layer": "mpant",
+      "layout": {
+        "visibility": "none",
+        "text-field": "{name}",
+        "text-font": [
+          "Roboto Mono Light"
+        ],
+        "text-size": 10
+      },
+      "paint": {}
+    },
+    {
+      "id": "graticules-lines",
+      "type": "line",
+      "source": "graticules",
+      "source-layer": "graticules",
+      "filter": [
+          "==",
+          "$type",
+          "LineString"
+      ],
+      "layout": {
+          "visibility": "none"
+      },
+      "paint": {
+          "line-color": "#174084",
+          "line-opacity": {
+              "base": 1,
+              "stops": [
+                  [
+                      0,
+                      0.7
+                  ],
+                  [
+                      8,
+                      0.7
+                  ],
+                  [
+                      9,
+                      0.2
+                  ]
+              ]
+          },
+          "line-width": 0.5
+      }
+  },
+  {
+      "id": "graticules-labels",
+      "type": "symbol",
+      "source": "graticules",
+      "source-layer": "graticules",
+      "filter": [
+          "==",
+          "$type",
+          "LineString"
+      ],
+      "layout": {
+          "visibility": "none",
+          "text-field": "{degrees}º",
+          "text-font": [
+              "Roboto Medium Italic"
+          ],
+          "symbol-placement": "line",
+          "symbol-spacing": {
+              "base": 1,
+              "stops": [
+                  [
+                      3,
+                      500
+                  ],
+                  [
+                      8,
+                      1000
+                  ]
+              ]
+          },
+          "text-size": {
+              "base": 1,
+              "stops": [
+                  [
+                      3,
+                      7
+                  ],
+                  [
+                      7,
+                      12
+                  ]
+              ]
+          },
+          "text-letter-spacing": 0.2
+      },
+      "paint": {
+          "text-color": "hsl(0, 0%, 100%)",
+          "text-halo-width": 0.5,
+          "text-translate": [
+              -1,
+              1
+          ],
+          "text-halo-color": "hsla(0, 0%, 68%, 0.49)",
+          "text-opacity": {
+              "base": 1,
+              "stops": [
+                  [
+                      0,
+                      1
+                  ],
+                  [
+                      8,
+                      1
+                  ],
+                  [
+                      9,
+                      0
+                  ]
+              ]
+          }
+      }
+    },
+    {
+      "id": "labels",
+      "type": "raster",
+      "source": "labels",
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {}
+    }
+  ]
+}
